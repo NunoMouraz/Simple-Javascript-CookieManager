@@ -17,11 +17,17 @@ class Cookie {
      * Creates a cookie
      * @param key
      * @param value
+     * @param expires
      */
-    static set(key, value) {
-        let expiryDate = new Date();
-        expiryDate.setMonth(expiryDate.getMonth() + 1);
-        document.cookie = key + "=" + value + "; expires=" + expiryDate.toGMTString();
+    static set(key, value, expires) {
+        if (typeof expires === 'undefined') {
+            expires = 1000 * 60 * 60 * 24 * 15; // ms * s * m * h * d
+        }
+
+        let todayDate = new Date();
+        let expirationDate = new Date();
+        expirationDate.setTime(todayDate.getTime() + expires);
+        document.cookie = key + "=" + value + "; expires=" + expirationDate.toGMTString();
     }
 
     /**
@@ -43,4 +49,9 @@ class Cookie {
         }
     }
 }
+
+// Examples
+Cookie.set('language', 'en');
+Cookie.delete('language');
+if (Cookie.exists('language')) {}
 ```
